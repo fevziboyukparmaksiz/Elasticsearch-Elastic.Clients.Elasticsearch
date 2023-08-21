@@ -105,6 +105,24 @@ namespace Elasticsearch.API.Repositories
             return result.Documents.ToImmutableList();
         }
 
+        public async Task<ImmutableList<ECommerce>> MultiMatchQueryFullTextAsync(string name)
+        {
+
+            var result = await _client.SearchAsync<ECommerce>(s => s.Index(indexName)
+            .Size(100)
+            .Query(q => q
+                .MultiMatch(mm => mm
+                    .Fields(new Field("customer_first_name")
+                        .And(new Field("customer_last_name"))
+                            .And(new Field("customer_full_name")))
+                    .Query(name))));
+
+            foreach (var hits in result.Hits) hits.Source.Id = hits.Id;
+
+            return result.Documents.ToImmutableList();
+        }
+
+
         public async Task<ImmutableList<ECommerce>> PaginationQueryAsync(int page, int pageSize)
         {
             //Page 1 , pagesize= 10 => 1-10

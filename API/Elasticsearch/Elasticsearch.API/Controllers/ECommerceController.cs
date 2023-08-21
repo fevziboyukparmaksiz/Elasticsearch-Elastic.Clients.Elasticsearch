@@ -88,5 +88,11 @@ namespace Elasticsearch.API.Controllers
             return Ok(await _repository.CompoundQueryExampleOneAsync(cityName, taxfulTotalPrice, categoryName, manufacturer));
 
         }
+
+        [HttpGet]
+        public async Task<IActionResult> MultiMatchQueryFullText(string name)
+        {
+            return Ok(await _repository.MultiMatchQueryFullTextAsync(name));
+        }
     }
 }
