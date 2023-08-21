@@ -161,7 +161,21 @@ namespace Elasticsearch.API.Repositories
             .Query(q => q
             .Match(m => m
             .Field(f => f.Category)
-            .Query(categoryName))));
+            .Query(categoryName)
+            .Operator(Operator.And))));
+
+            foreach (var hits in result.Hits) hits.Source.Id = hits.Id;
+
+            return result.Documents.ToImmutableList();
+        }
+
+        public async Task<ImmutableList<ECommerce>> MatchBoolPrefixFullTextAsync(string customerFullName)
+        {
+            var result = await _client.SearchAsync<ECommerce>(s => s.Index(indexName)
+            .Query(q => q
+            .MatchBoolPrefix(m => m
+            .Field(f => f.CustomerFullName)
+            .Query(customerFullName))));
 
             foreach (var hits in result.Hits) hits.Source.Id = hits.Id;
 
