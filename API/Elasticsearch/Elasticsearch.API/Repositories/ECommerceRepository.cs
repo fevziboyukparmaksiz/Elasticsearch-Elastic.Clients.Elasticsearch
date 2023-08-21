@@ -181,6 +181,19 @@ namespace Elasticsearch.API.Repositories
 
             return result.Documents.ToImmutableList();
         }
+
+        public async Task<ImmutableList<ECommerce>> MatchPhraseFullTextAsync(string customerFullName)
+        {
+            var result = await _client.SearchAsync<ECommerce>(s => s.Index(indexName)
+            .Query(q => q
+            .MatchPhrase(m => m
+            .Field(f => f.CustomerFullName)
+            .Query(customerFullName))));
+
+            foreach (var hits in result.Hits) hits.Source.Id = hits.Id;
+
+            return result.Documents.ToImmutableList();
+        }
     }
 }
 

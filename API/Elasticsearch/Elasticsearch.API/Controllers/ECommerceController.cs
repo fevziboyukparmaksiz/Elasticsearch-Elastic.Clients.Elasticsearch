@@ -74,5 +74,11 @@ namespace Elasticsearch.API.Controllers
         {
             return Ok(await _repository.MatchBoolPrefixFullTextAsync(customerFullName));
         }
+
+        [HttpGet]
+        public async Task<IActionResult> MatchPhraseFullText(string customerFullName)
+        {
+            return Ok(await _repository.MatchPhraseFullTextAsync(customerFullName));
+        }
     }
 }
