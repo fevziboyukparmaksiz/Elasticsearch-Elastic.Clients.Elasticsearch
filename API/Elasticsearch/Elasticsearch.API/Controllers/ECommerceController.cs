@@ -26,5 +26,16 @@ namespace Elasticsearch.API.Controllers
         {
             return Ok(await _repository.TermsQuery(customerFirstName));
         }
+        [HttpGet]
+        public async Task<IActionResult> PrefixQuery(string customerFullName)
+        {
+            return Ok(await _repository.PrefixQuery(customerFullName));
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> RangeQuery(double fromPrice, double toPrice)
+        {
+            return Ok(await _repository.RangeQuery(fromPrice, toPrice));
+        }
     }
 }

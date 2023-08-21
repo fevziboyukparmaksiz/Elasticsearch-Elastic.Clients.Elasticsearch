@@ -63,6 +63,35 @@ namespace Elasticsearch.API.Repositories
 
             return result.Documents.ToImmutableList();
         }
+
+        public async Task<ImmutableList<ECommerce>> PrefixQuery(string customerFullName)
+        {
+            var result = await _client.SearchAsync<ECommerce>(s => s.Index(indexName)
+            .Query(q => q
+            .Prefix(p => p
+            .Field(f => f.CustomerFullName.Suffix("keyword"))
+            .Value(customerFullName))));
+
+            foreach (var hits in result.Hits) hits.Source.Id = hits.Id;
+
+            return result.Documents.ToImmutableList();
+        }
+
+
+        public async Task<ImmutableList<ECommerce>> RangeQuery(double FromPrice, double toPrice)
+        {
+            var result = await _client.SearchAsync<ECommerce>(s => s.Index(indexName)
+            .Query(q => q
+            .Range(r => r
+            .NumberRange(nr => nr
+            .Field(f => f.TaxfulTotalPrice)
+            .Gte(FromPrice)
+            .Lte(toPrice)))));
+
+            foreach (var hits in result.Hits) hits.Source.Id = hits.Id;
+
+            return result.Documents.ToImmutableList();
+        }
     }
 }
 
