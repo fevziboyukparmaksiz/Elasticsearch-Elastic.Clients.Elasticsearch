@@ -121,6 +121,22 @@ namespace Elasticsearch.API.Repositories
 
             return result.Documents.ToImmutableList();
         }
+
+        public async Task<ImmutableList<ECommerce>> WildCardQueryAsync(string customerFullName)
+        {
+
+            var result = await _client.SearchAsync<ECommerce>(s => s.Index(indexName)
+
+            .Query(q => q
+            .Wildcard(w => w
+            .Field(f => f.CustomerFullName.Suffix("keyword"))
+            .Wildcard(customerFullName))));
+
+            foreach (var hits in result.Hits) hits.Source.Id = hits.Id;
+
+            return result.Documents.ToImmutableList();
+        }
+
     }
 }
 
