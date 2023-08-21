@@ -50,13 +50,16 @@ namespace Elasticsearch.API.Controllers
             return Ok(await _repository.PaginationQueryAsync(page, pageSize));
         }
 
-
-
         [HttpGet]
         public async Task<IActionResult> WildCardQuery(string customerFullName)
         {
             return Ok(await _repository.WildCardQueryAsync(customerFullName));
         }
 
+        [HttpGet]
+        public async Task<IActionResult> FuzzyQuery(string customerName)
+        {
+            return Ok(await _repository.FuzzyQueryAsync(customerName));
+        }
     }
 }
