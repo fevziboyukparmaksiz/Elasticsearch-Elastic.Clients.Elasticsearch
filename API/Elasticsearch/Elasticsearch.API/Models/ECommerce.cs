@@ -23,6 +23,8 @@ namespace Elasticsearch.API.Models.ECommerceModel
         [JsonPropertyName("taxful_total_price")]
         public double TaxfulTotalPrice { get; set; }
 
+
+
     }
 
     public class Product

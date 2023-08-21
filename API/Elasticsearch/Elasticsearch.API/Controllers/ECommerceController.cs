@@ -80,5 +80,13 @@ namespace Elasticsearch.API.Controllers
         {
             return Ok(await _repository.MatchPhraseFullTextAsync(customerFullName));
         }
+
+        [HttpGet]
+        public async Task<IActionResult> CompoundQueryExampleOne(string cityName, double taxfulTotalPrice, string categoryName, string manufacturer)
+        {
+
+            return Ok(await _repository.CompoundQueryExampleOneAsync(cityName, taxfulTotalPrice, categoryName, manufacturer));
+
+        }
     }
 }
