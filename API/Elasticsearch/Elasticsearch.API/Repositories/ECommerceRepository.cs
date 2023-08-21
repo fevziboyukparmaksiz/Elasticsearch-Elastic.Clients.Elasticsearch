@@ -104,6 +104,23 @@ namespace Elasticsearch.API.Repositories
 
             return result.Documents.ToImmutableList();
         }
+
+        public async Task<ImmutableList<ECommerce>> PaginationQueryAsync(int page, int pageSize)
+        {
+            //Page 1 , pagesize= 10 => 1-10
+            //Page 2 , pagesize= 10 => 11-20
+            //Page 3 , pagesize= 10 => 21-30
+
+            var pageFrom = (page - 1) * pageSize;
+
+            var result = await _client.SearchAsync<ECommerce>(s => s.Index(indexName)
+            .Size(pageSize).From(pageFrom)
+            .Query(q => q.MatchAll()));
+
+            foreach (var hits in result.Hits) hits.Source.Id = hits.Id;
+
+            return result.Documents.ToImmutableList();
+        }
     }
 }
 
